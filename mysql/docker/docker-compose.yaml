@@ -1,0 +1,17 @@
+version: "3"
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:8
+    command: --innodb-use-native-aio=0
+    tty: true
+    environment:
+      MYSQL_DATABASE: metabase
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"

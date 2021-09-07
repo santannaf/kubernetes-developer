@@ -1,0 +1,19 @@
+version: "3"
+services:
+  oracle:
+    image: daggerok/oracle:11.2.0.2-xe
+    shm_size: 1g
+    environment:
+      - ORACLE_SID=teste
+      - ORACLE_ALLOW_REMOTE=true
+      - ORACLE_PWD=admin
+    ports:
+      - "1521:1521"
+    healthcheck:
+      test: sleep 10; curl -uSYSTEM:$$ORACLE_PWD -v http://127.0.0.1:8080//apex/
+      retries: 20
+    volumes:
+      - $PWD/oradata:/opt/oracle/oradata
+      - $PWD/oradata/recovery_area:/opt/oracle/oradata/recovery_area
+      - $PWD/ora-setup-scripts:/opt/oracle/scripts/setup
+      - $PWD/ora-startup-scripts:/opt/oracle/scripts/startup
